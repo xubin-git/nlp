@@ -26,26 +26,21 @@ def softmax(x):
     Return:
     x -- You are allowed to modify x in-place
     """
-    orig_shape = x.shape
-    x_soft_max= np.zeros(orig_shape)    
-    
+    orig_shape = x.shape  
     if len(x.shape) > 1:
         # Matrix
-        ### YOUR CODE HERE
-        for i in range(orig_shape[0]):
-            x_1 = x[i]-np.max(x[i])
-            score = np.exp(x_1) / np.sum(np.exp(x_1))
-            x_soft_max[i] = score
-        x = x_soft_max
+        ### YOUR CODE HERE        
+        x -= np.max(x, axis = 1, keepdims=True)
+        print("111x is ", x)
+        x = np.exp(x)/np.sum(np.exp(x), axis = 1, keepdims=True)
+        print("x is ", x)
         #raise NotImplementedError
         ### END YOUR CODE
     else:
         # Vector
         ### YOUR CODE HERE
-        x_1 = x-np.max(x)
-        score = np.exp(x_1)/ np.sum(np.exp(x_1))
-        x_soft_max = score 
-        x = x_soft_max
+        x -= np.max(x, axis = 0, keepdims = True)
+        x = np.exp(x)/np.sum(np.exp(x))
        # raise NotImplementedError
         ### END YOUR CODE
 
@@ -93,14 +88,13 @@ def test_softmax():
     """
     print("Running your tests...")
     ### YOUR CODE HERE
-    test1 = softmax(np.array([0,2]))
+    test1 = softmax(np.random.rand(3,2))
     print(test1)
-    ans1 = np.array([0.11920292,  0.88079707])
-    assert np.allclose(test1, ans1, rtol=1e-05, atol=1e-06)
+    
     #raise NotImplementedError
     ### END YOUR CODE
 
 
 if __name__ == "__main__":
     test_softmax_basic()
-    test_softmax()
+   # test_softmax()

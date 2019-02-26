@@ -41,29 +41,37 @@ def forward_backward_prop(X, labels, params, dimensions):
     # Note: compute cost based on `sum` not `mean`.
     ### YOUR CODE HERE: forward propagation
     h = sigmoid(np.dot(X, W1) + b1)
-    print("h.shape is ",h.shape)
     yhat = softmax(np.dot(h, W2) + b2)
-    print("yhat.shape is ",yhat.shape)
-    cost = np.sum(-np.log(yhat[labels ==1])) / yhat.shape[0] 
-    print("cost is ",cost)
+    cost = np.sum(-np.log(yhat[labels==1])) / labels.shape[0]
     
     #raise NotImplementedError
     ### END YOUR CODE
     ### YOUR CODE HERE: backward propagation
-    d3 = (yhat - labels) / X.shape[0]
-    gradb2 = np.sum(d3,0)
-    gradW2 = np.dot(h.T, d3)
-    gradh = np.dot(d3, np.transpose(W2))
-    gradb1 = np.sum(sigmoid_grad(h) * gradh)
-    gradW1 = np.dot(np.transpose(X), sigmoid_grad(h) * gradh)     
+    
+    d3 = (yhat - labels) / labels.shape[0]
+    gradb2 = np.sum(d3, axis = 0, keepdims=True)
+    gradW2 = np.dot(h.T, d3) 
+    
+    dh = np.dot(d3, W2.T)
+    grad_h = sigmoid_grad(h) * dh
+    gradb1 = np.sum(grad_h, 0, keepdims=True)
+    gradW1 = np.dot(X.T, grad_h)
+    
+    
 
-    print(" gradb2.shape", gradb2.shape)
-    print(" gradW2.shape", gradW2.shape)
-    print(" gradh.shape", gradh.shape)
-    print(" gradb1.shape", gradb1.shape)
-    print(" gradW1.shape", gradW1.shape)
+    '''
+
+    d3 = (yhat - labels) / X.shape[0]
+    gradW2 = np.dot(h.T, d3)
+    gradb2 = np.sum(d3,0,keepdims=True)
+
+    dh = np.dot(d3,W2.T)
+    grad_h = sigmoid_grad(h) * dh
+
+    gradW1 = np.dot(X.T,grad_h)
+    gradb1 = np.sum(grad_h,0)
     
-    
+    '''
     #raise NotImplementedError
     ### END YOUR CODE
 
