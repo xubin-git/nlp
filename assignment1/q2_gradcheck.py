@@ -16,6 +16,7 @@ def gradcheck_naive(f, x):
 
     rndstate = random.getstate()
     random.setstate(rndstate)
+    print(x)
     fx, grad = f(x) # Evaluate function value at original point
     h = 1e-4        # Do not change this!
     # Iterate over all indexes ix in x to check the gradient.
@@ -35,9 +36,19 @@ def gradcheck_naive(f, x):
         # to test cost functions with built in randomness later.
 
         ### YOUR CODE HERE:
-
-        numgrad = (f(x[ix] + h)[0]- f(x[ix] - h)[0]) / (2*h)
-       
+        #numgrad = (f(x[ix] + h)[0]- f(x[ix] - h)[0]) / (2*h)
+        #print("111numgrad is ", numgrad)
+        
+        
+        x[ix] += h
+        random.setstate(rndstate)
+        new_f1 = f(x)[0]
+        x[ix] -= 2*h
+        random.setstate(rndstate)
+        new_f2 = f(x)[0]
+        x[ix] += h
+        numgrad = (new_f1 - new_f2) / (2 * h)
+        print("222numgrad is ", numgrad)
        # raise NotImplementedError
         ### END YOUR CODE
 

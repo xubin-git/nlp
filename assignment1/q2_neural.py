@@ -56,8 +56,6 @@ def forward_backward_prop(X, labels, params, dimensions):
     grad_h = sigmoid_grad(h) * dh
     gradb1 = np.sum(grad_h, 0, keepdims=True)
     gradW1 = np.dot(X.T, grad_h)
-    
-    
 
     '''
 
